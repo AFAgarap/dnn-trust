@@ -34,7 +34,10 @@ class LeNet(tf.keras.Model):
                 units=84,
                 activation=tf.nn.relu
                 )
-        self.output_layer = tf.keras.layers.Dense(units=kwargs['num_classes'])
+        self.output_layer = tf.keras.layers.Dense(
+                units=kwargs['num_classes'],
+                activation=tf.nn.softmax
+                )
 
     @tf.function
     def call(self, features):
