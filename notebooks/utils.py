@@ -13,7 +13,7 @@ import tensorflow as tf
 from trustscore import TrustScore
 
 
-def run_sc(model, train_features, train_labels, test_features):
+def run_model(model, train_features, train_labels, test_features):
     model.fit(train_features,
               train_labels,
               batch_size=128,
