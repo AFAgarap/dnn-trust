@@ -16,8 +16,8 @@ from trustscore import TrustScore
 def run_model(model, train_features, train_labels, test_features):
     model.fit(train_features,
               train_labels,
-              batch_size=128,
-              epochs=5,
+              batch_size=512,
+              epochs=60,
               verbose=0)
     predicted_prob_dist = model.predict(test_features)
     predicted_class = tf.argmax(predicted_prob_dist, axis=1)
@@ -58,7 +58,7 @@ def plot_precision_curve(plot_title,
 
 
 def run_precision_plt(features, labels, nfolds, percentiles, run_model, test_size=2e-1,
-                      plt_title='', plt_names=[], predict_correct=True, classes=10):
+                      plt_title='', plt_names=[], predict_correct=True, classes=10, model=None):
 
     def stderr(L):
         return np.std(L) / np.sqrt(len(L))
@@ -75,16 +75,20 @@ def run_precision_plt(features, labels, nfolds, percentiles, run_model, test_siz
         train_features, train_labels = features[train_idx, :], labels[train_idx, :]
         val_features, val_labels = features[val_idx, :], labels[val_idx, :]
 
-        predicted_class, likelihood = run_model(train_features, train_labels, val_features)
+        predicted_class, likelihood = run_model(model, train_features, train_labels, val_features)
 
         val_class = tf.argmax(val_labels, axis=1)
-        target_points = (np.where(predicted_class == val_class)[0] if predict_correct else
-                         np.where(predicted_class != val_class)[0])
+        target_points = (np.where(predicted_class.numpy() == val_class.numpy())[0] if predict_correct else
+                         np.where(predicted_class.numpy() != val_class.numpy())[0])
         final_curves = [likelihood]
 
         pca = PCA(n_components=64)
-        enc_train_features = pca.fit_transform(train_features)
-        enc_val_features = pca.transform(val_features)
+        if len(train_features.shape) == 2:
+            enc_train_features = pca.fit_transform(train_features)
+            enc_val_features = pca.transform(val_features)
+        else:
+            enc_train_features = pca.fit_transform(train_features.reshape(-1, 784))
+            enc_val_features = pca.transform(val_features.reshape(-1, 784))
 
         ts = TrustScore()
         ts.fit(enc_train_features, train_labels, classes=classes)
