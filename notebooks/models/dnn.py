@@ -39,7 +39,8 @@ class NeuralNet(tf.keras.Model):
                 rate=kwargs['dropout_rate']
                 )
         self.output_layer = tf.keras.layers.Dense(
-                units=kwargs['num_classes']
+                units=kwargs['num_classes'],
+                activation=tf.nn.softmax
                 )
 
     @tf.function
