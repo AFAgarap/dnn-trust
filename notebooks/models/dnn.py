@@ -29,13 +29,17 @@ class NeuralNet(tf.keras.Model):
         super(NeuralNet, self).__init__()
         self.hidden_layer_1 = tf.keras.layers.Dense(
                 units=kwargs['units'][0],
-                activation=tf.nn.relu
+                activation=tf.nn.relu,
+                input_shape=kwargs['input_shape']
+                )
+        self.dropout_layer_1 = tf.keras.layers.Dropout(
+                rate=['dropout_rate']
                 )
         self.hidden_layer_2 = tf.keras.layers.Dense(
                 units=kwargs['units'][1],
                 activation=tf.nn.relu
                 )
-        self.dropout_layer = tf.keras.layers.Dropout(
+        self.dropout_layer_2 = tf.keras.layers.Dropout(
                 rate=kwargs['dropout_rate']
                 )
         self.output_layer = tf.keras.layers.Dense(
@@ -44,9 +48,10 @@ class NeuralNet(tf.keras.Model):
                 )
 
     @tf.function
-    def call(self, batch_features):
-        activation = self.hidden_layer_1(batch_features)
+    def call(self, features):
+        activation = self.hidden_layer_1(features)
+        activation = self.dropout_layer_1(activation)
         activation = self.hidden_layer_2(activation)
-        activation = self.dropout_layer(activation)
+        activation = self.dropout_layer_2(activation)
         output = self.output_layer(activation)
         return output
