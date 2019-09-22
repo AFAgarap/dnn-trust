@@ -17,9 +17,33 @@ from notebooks.models.lenet import LeNet
 from notebooks.trustscore import TrustScore
 
 
-model = LeNet(num_classes=10)
-model.load_weights('notebooks/saved_model/mnist/lenet/1')
-model.trainable = False
+def load_model(model_name, model_path, num_classes=10, **kwargs):
+    if (model_name == 'LeNet') or (model_name == 'lenet'):
+        model = LeNet(num_classes=num_classes)
+    elif (model_name == 'MiniVGG') or (model_name == 'mini_vgg'):
+        assert 'input_shape' in kwargs,\
+                'Expected argument : [input_shape]'
+        input_shape = kwargs['input_shape']
+        model = MiniVGG(input_shape=input_shape, num_classes=num_classes)
+    elif (model_name == 'NeuralNet') or (model_name == 'dnn'):
+        assert 'input_shape' in kwargs,\
+                'Expected argument : [input_shape]'
+        assert 'units' in kwargs,\
+            'Expected argument : [units]'
+        assert 'dropout_rate' in kwargs,\
+            'Expected argument : [dropout_rate]'
+        input_shape = kwargs['input_shape']
+        units = kwargs['units']
+        dropout_rate = kwargs['dropout_rate']
+        model = NeuralNet(
+                input_shape=input_shape,
+                units=units,
+                dropout_rate=dropout_rate,
+                num_classes=num_classes
+                )
+    model.load_weights(model_path)
+    model.trainable = False
+    return model
 
 index = int(sys.argv[1])
 
