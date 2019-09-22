@@ -234,10 +234,10 @@ def main(arguments):
             enc_test_features,
             test_labels,
             prediction,
-            trust_score,
+            trust_score[0],
             index,
-            pred_idx,
-            closest_not_pred_idx
+            pred_idx[0],
+            closest_not_pred_idx[0]
             )
 
 
