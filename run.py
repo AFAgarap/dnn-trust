@@ -51,7 +51,7 @@ def load_model(model_name, model_path, num_classes=10, **kwargs):
 def load_data():
     (train_features, train_labels),\
             (test_features, test_labels) =\
-            tf.keras.datasets.mnist.load_dta()
+            tf.keras.datasets.mnist.load_data()
     train_features = train_features.astype('float32') / 255.
     train_labels = tf.keras.utils.to_categorical(train_labels)
     test_features = test_features.astype('float32') / 255.
