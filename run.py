@@ -126,6 +126,7 @@ def visualize_trust_score(
         enc_test_features,
         test_label,
         predictions,
+        closest_not_pred,
         trust_score,
         index,
         pred_idx,
@@ -150,10 +151,7 @@ def visualize_trust_score(
     plt.imshow(
             test_features[closest_not_pred_idx].reshape(28, 28), cmap='gray'
             )
-    plt.title('closest not predicted : {} ({:.6f})'.format(
-        tf.argmax(test_label[closest_not_pred_idx]),
-        tf.math.reduce_max(test_label[closest_not_pred_idx])
-    ))
+    plt.title('closest not predicted : {}'.format(closest_not_pred))
     plt.show()
 
     enc_test_features = np.array([
@@ -263,6 +261,7 @@ def main(arguments):
             enc_test_features,
             test_labels,
             prediction,
+            closest_not_pred[0],
             trust_score[0],
             index,
             pred_idx[0],
