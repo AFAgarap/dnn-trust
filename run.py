@@ -140,7 +140,7 @@ def visualize_trust_score(
 
     print('[INFO] Visualizing prediction and trust score.')
 
-    sns.set_style('dark')
+    sns.set_style('dark', {'grid.linestyle': '--'})
 
     predictions = predictions.numpy().reshape(-1)
     d_to_pred, d_to_closest_not_pred = distances
@@ -153,7 +153,7 @@ def visualize_trust_score(
         [enc_test_features[closest_not_pred_idx][0],
             enc_test_features[closest_not_pred_idx][1]]
         ])
-    labels = ['true_class', 'predicted_class', 'closest_not_predicted']
+    labels = ['True Class', 'Predicted Class', 'Closest not predicted']
 
     figure = plt.figure(1)
     gridspec.GridSpec(3, 3)
@@ -176,7 +176,7 @@ def visualize_trust_score(
                   d_to_pred,
                   d_to_closest_not_pred
                   ),
-              loc='right')
+              loc='center')
     plt.grid()
 
     plt.subplot2grid((3, 3), (0, 2))
