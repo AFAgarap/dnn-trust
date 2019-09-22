@@ -75,18 +75,10 @@ def load_data():
            (enc_train_features, enc_test_features)
 
 
-(train_features, train_labels), (test_features, test_labels) = tf.keras.datasets.mnist.load_data()
-train_features = train_features.astype('float32') / 255.
-train_labels = tf.keras.utils.to_categorical(train_labels)
-test_features = test_features.astype('float32') / 255.
-test_labels = tf.keras.utils.to_categorical(test_labels)
-
-pca = PCA(n_components=64)
-enc_train_features = pca.fit_transform(train_features.reshape(-1, 784))
-enc_test_features = pca.transform(test_features.reshape(-1, 784))
-
-ts = TrustScore(alpha=5e-2)
-ts.fit(enc_train_features, train_labels)
+def fit_ts_model(train_features, train_labels, alpha=5e-2):
+    ts = TrustScore(alpha=alpha)
+    ts.fit(train_features, train_labels)
+    return ts
 
 predictions = model(test_features[index].reshape(-1, 28, 28, 1))
 
