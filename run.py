@@ -56,13 +56,11 @@ plt.title('closest not predicted : {} ({:.6f})'.format(
     ))
 plt.show()
 
-scatter = np.array(
-        [
-            [enc_test_features[index][0], enc_test_features[pred_idx][0], enc_test_features[closest_not_pred_idx][0]],
-            [enc_test_features[index][1], enc_test_features[pred_idx][1], enc_test_features[closest_not_pred_idx][1]]
-        ])
-scatter = scatter.T
+scatter = np.array([
+    [enc_test_features[index][0], enc_test_features[index][1]],
+    [enc_test_features[pred_idx][0], enc_test_features[pred_idx][1]],
+    [enc_test_features[closest_not_pred_idx][0], enc_test_features[closest_not_pred_idx][1]]
+            ])
 print(scatter)
-print(scatter.shape)
 plt.scatter(scatter[:, 0], scatter[:, 1], alpha=0.5, c=np.arange(3))
 plt.show()
