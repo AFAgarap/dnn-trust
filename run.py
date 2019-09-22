@@ -6,7 +6,7 @@ from __future__ import print_function
 __author__ = 'Abien Fred Agarap'
 __version__ = '1.0.0'
 
-import sys
+import argparse
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -142,9 +142,42 @@ def visualize_trust_score(
     plt.show()
 
 
-def main():
+def parse_args():
+    parser = argparse.ArgumentParser(
+            description='Visualization tool for understanding trust score'
+            )
+    group = parser.add_argument_group('Parameters')
+    group.add_argument(
+            '-m',
+            '--model',
+            required=False,
+            default='LeNet',
+            type=str,
+            help='the model to use, default : [LeNet]')
+    group.add_argument(
+            '-p',
+            '--model_path',
+            required=False,
+            default='notebooks/saved_model/mnist/lenet/1',
+            type=str,
+            help='the path to the trained model,'
+                    ' default : [notebooks/saved_model/mnist/lenet/1]'
+            )
+    group.add_argument(
+            '-i',
+            '--index',
+            required=True,
+            type=int,
+            help='the index of the example to classify'
+            )
+    arguments = parser.parse_args()
+    return arguments
+
+
+def main(arguments):
     pass
 
 
 if __name__ == '__main__':
-    main()
+    arguments = parse_args()
+    main(arguments)
