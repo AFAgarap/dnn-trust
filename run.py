@@ -19,6 +19,31 @@ from notebooks.models.mini_vgg import MiniVGG
 from notebooks.trustscore import TrustScore
 
 
+def load_data():
+    (train_features, train_labels),\
+            (test_features, test_labels) =\
+            tf.keras.datasets.mnist.load_data()
+    train_features = train_features.astype('float32') / 255.
+    train_labels = tf.keras.utils.to_categorical(train_labels)
+    test_features = test_features.astype('float32') / 255.
+    test_labels = tf.keras.utils.to_categorical(test_labels)
+
+    pca = PCA(n_components=64)
+    enc_train_features = pca.fit_transform(
+            train_features.reshape(
+                -1, train_features.shape[1] * train_features.shape[2]
+                )
+            )
+    enc_test_features = pca.transform(
+            test_features.reshape(
+                -1, test_features.shape[1] * test_features.shape[2]
+                )
+            )
+    return (train_features, train_labels),\
+           (test_features, test_labels),\
+           (enc_train_features, enc_test_features)
+
+
 def load_model(model_name, model_path, num_classes=10, **kwargs):
     if (model_name == 'LeNet') or (model_name == 'lenet'):
         model = LeNet(num_classes=num_classes)
@@ -46,31 +71,6 @@ def load_model(model_name, model_path, num_classes=10, **kwargs):
     model.load_weights(model_path)
     model.trainable = False
     return model
-
-
-def load_data():
-    (train_features, train_labels),\
-            (test_features, test_labels) =\
-            tf.keras.datasets.mnist.load_data()
-    train_features = train_features.astype('float32') / 255.
-    train_labels = tf.keras.utils.to_categorical(train_labels)
-    test_features = test_features.astype('float32') / 255.
-    test_labels = tf.keras.utils.to_categorical(test_labels)
-
-    pca = PCA(n_components=64)
-    enc_train_features = pca.fit_transform(
-            train_features.reshape(
-                -1, train_features.shape[1] * train_features.shape[2]
-                )
-            )
-    enc_test_features = pca.transform(
-            test_features.reshape(
-                -1, test_features.shape[1] * test_features.shape[2]
-                )
-            )
-    return (train_features, train_labels),\
-           (test_features, test_labels),\
-           (enc_train_features, enc_test_features)
 
 
 def fit_ts_model(train_features, train_labels, alpha=5e-2):
