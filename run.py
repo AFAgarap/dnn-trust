@@ -80,7 +80,21 @@ def fit_ts_model(train_features, train_labels, alpha=5e-2):
     ts.fit(train_features, train_labels)
     return ts
 
-predictions = model(test_features[index].reshape(-1, 28, 28, 1))
+
+def get_prediction(model, test_features, index=None):
+    if index is None:
+        return model(
+                test_features.reshape(
+                    -1, test_features.shape[1], test_features.shape[2], 1
+                    )
+                )
+    elif index is not None:
+        return model(
+                test_features[index].reshape(
+                    -1, test_features.shape[1], test_features.shape[2], 1
+                    )
+                )
+
 
 trust_score, closest_not_pred,\
         pred_idx, closest_not_pred_idx = ts.score(
