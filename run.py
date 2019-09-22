@@ -1,3 +1,11 @@
+"Visualization tool for understanding trust score"
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+__author__ = 'Abien Fred Agarap'
+__version__ = '1.0.0'
+
 import matplotlib.pyplot as plt
 from notebooks.models.lenet import LeNet
 from notebooks.trustscore import TrustScore
