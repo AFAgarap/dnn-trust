@@ -23,8 +23,11 @@ __version__ = '1.0.0'
 
 import argparse
 
+
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from sklearn.decomposition import PCA
 import tensorflow as tf
 
@@ -132,28 +135,17 @@ def visualize_trust_score(
         index,
         pred_idx,
         closest_not_pred_idx,
+        distances
         ):
 
     print('[INFO] Visualizing prediction and trust score.')
-    predictions = predictions.numpy().reshape(-1)
 
-    plt.figure(figsize=(15, 5))
-    plt.subplot(131)
-    plt.imshow(test_features[index].reshape(28, 28), cmap='gray')
-    plt.title('label : {}'.format(tf.argmax(test_label[index])))
-    plt.subplot(132)
-    plt.imshow(test_features[pred_idx].reshape(28, 28), cmap='gray')
-    plt.title('predicted : {} ({:.6f})\ntrust score : {:.6f}'.format(
-        tf.argmax(predictions).numpy(),
-        tf.math.reduce_max(predictions),
-        trust_score
-    ))
-    plt.subplot(133)
-    plt.imshow(
-            test_features[closest_not_pred_idx].reshape(28, 28), cmap='gray'
-            )
-    plt.title('closest not predicted : {}'.format(closest_not_pred))
-    plt.show()
+    sns.set_style('dark')
+
+    predictions = predictions.numpy().reshape(-1)
+    d_to_pred, d_to_closest_not_pred = distances
+    d_to_pred = d_to_pred[0]
+    d_to_closest_not_pred = d_to_closest_not_pred[0]
 
     enc_test_features = np.array([
         [enc_test_features[index][0], enc_test_features[index][1]],
@@ -162,19 +154,50 @@ def visualize_trust_score(
             enc_test_features[closest_not_pred_idx][1]]
         ])
     labels = ['true_class', 'predicted_class', 'closest_not_predicted']
-    figure, axes = plt.subplots()
-    axes.scatter(
+
+    figure = plt.figure(1)
+    gridspec.GridSpec(3, 3)
+
+    plt.subplot2grid((3, 3), (0, 0), colspan=2, rowspan=3)
+    plt.scatter(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
-            c=np.arange(3)
+            color=['red', 'blue', 'green'],
+            s=50
             )
     for x_i, y_i, label in zip(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
             labels
             ):
-        axes.annotate(str(label), xy=(x_i, y_i))
+        plt.annotate(label, xy=(x_i, y_i))
+    plt.title('Distance between\nPredicted and True : {:.5f}\n'
+              'Not Predicted and True : {:.5f}'.format(
+                  d_to_pred,
+                  d_to_closest_not_pred
+                  ),
+              loc='right')
     plt.grid()
+
+    plt.subplot2grid((3, 3), (0, 2))
+    plt.imshow(test_features[index].reshape(28, 28), cmap='gray')
+    plt.title('Label : {}'.format(tf.argmax(test_label[index])))
+
+    plt.subplot2grid((3, 3), (1, 2))
+    plt.imshow(test_features[pred_idx].reshape(28, 28), cmap='gray')
+    plt.title('Predicted : {} ({:.5f})\nTrust Score : {:.5f}'.format(
+        tf.argmax(predictions).numpy(),
+        tf.math.reduce_max(predictions),
+        trust_score
+        ))
+    plt.subplot2grid((3, 3), (2, 2))
+    plt.imshow(
+            test_features[closest_not_pred_idx].reshape(28, 28),
+            cmap='gray'
+            )
+    plt.title('Closest not predicted : {}'.format(closest_not_pred))
+
+    figure.tight_layout()
     plt.show()
 
 
@@ -273,7 +296,8 @@ def main(arguments):
             trust_score[0],
             index,
             pred_idx[0],
-            closest_not_pred_idx[0]
+            closest_not_pred_idx[0],
+            (d_to_pred, d_to_closest_not_pred)
             )
 
 
