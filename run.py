@@ -18,8 +18,6 @@ from notebooks.models.lenet import LeNet
 from notebooks.models.mini_vgg import MiniVGG
 from notebooks.trustscore import TrustScore
 
-index = int(sys.argv[1])
-
 
 def load_model(model_name, model_path, num_classes=10, **kwargs):
     if (model_name == 'LeNet') or (model_name == 'lenet'):
@@ -142,3 +140,11 @@ def visualize_trust_score(
             c=np.arange(3)
             )
     plt.show()
+
+
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    main()
