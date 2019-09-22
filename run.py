@@ -19,6 +19,31 @@ from notebooks.models.mini_vgg import MiniVGG
 from notebooks.trustscore import TrustScore
 
 
+def load_data():
+    (train_features, train_labels),\
+            (test_features, test_labels) =\
+            tf.keras.datasets.mnist.load_data()
+    train_features = train_features.astype('float32') / 255.
+    train_labels = tf.keras.utils.to_categorical(train_labels)
+    test_features = test_features.astype('float32') / 255.
+    test_labels = tf.keras.utils.to_categorical(test_labels)
+
+    pca = PCA(n_components=64)
+    enc_train_features = pca.fit_transform(
+            train_features.reshape(
+                -1, train_features.shape[1] * train_features.shape[2]
+                )
+            )
+    enc_test_features = pca.transform(
+            test_features.reshape(
+                -1, test_features.shape[1] * test_features.shape[2]
+                )
+            )
+    return (train_features, train_labels),\
+           (test_features, test_labels),\
+           (enc_train_features, enc_test_features)
+
+
 def load_model(model_name, model_path, num_classes=10, **kwargs):
     if (model_name == 'LeNet') or (model_name == 'lenet'):
         model = LeNet(num_classes=num_classes)
@@ -48,31 +73,6 @@ def load_model(model_name, model_path, num_classes=10, **kwargs):
     return model
 
 
-def load_data():
-    (train_features, train_labels),\
-            (test_features, test_labels) =\
-            tf.keras.datasets.mnist.load_dta()
-    train_features = train_features.astype('float32') / 255.
-    train_labels = tf.keras.utils.to_categorical(train_labels)
-    test_features = test_features.astype('float32') / 255.
-    test_labels = tf.keras.utils.to_categorical(test_labels)
-
-    pca = PCA(n_components=64)
-    enc_train_features = pca.fit_transform(
-            train_features.reshape(
-                -1, train_features.shape[1] * train_features.shape[2]
-                )
-            )
-    enc_test_features = pca.transform(
-            test_features.reshape(
-                -1, test_features.shape[1] * test_features.shape[2]
-                )
-            )
-    return (train_features, train_labels),\
-           (test_features, test_labels),\
-           (enc_train_features, enc_test_features)
-
-
 def fit_ts_model(train_features, train_labels, alpha=5e-2):
     ts = TrustScore(alpha=alpha)
     ts.fit(train_features, train_labels)
@@ -80,7 +80,7 @@ def fit_ts_model(train_features, train_labels, alpha=5e-2):
 
 
 def get_prediction(model, test_features, index=None):
-    return model(test_features[:, :, :, np.newaxis])
+    return model(test_features)
 
 
 def get_trust_score(ts_model, test_features, predictions):
@@ -89,7 +89,7 @@ def get_trust_score(ts_model, test_features, predictions):
             pred_idx,\
             closest_not_pred_idx = ts_model.score(
                     test_features.reshape(-1, 64),
-                    predictions.numpy.reshape(1, -1)
+                    predictions.numpy().reshape(1, -1)
                     )
     return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
@@ -175,7 +175,70 @@ def parse_args():
 
 
 def main(arguments):
-    pass
+    model = arguments.model
+    model_path = arguments.model_path
+    index = arguments.index
+
+    (train_features, train_labels),\
+        (test_features, test_labels),\
+        (enc_train_features, enc_test_features) = load_data()
+
+    if (model == 'LeNet') or (model == 'lenet'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path
+                )
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 28, 28, 1)
+                )
+    elif (model == 'MiniVGG') or (model == 'mini_vgg'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path,
+                input_shape=(28, 28, 1)
+                )
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 28, 28, 1)
+                )
+    elif (model == 'NeuralNet') or (model == 'dnn'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path,
+                input_shape=(784,),
+                units=[512, 512],
+                dropout_rate=2e-1
+                )
+        test_features = test_features.reshape(-1, 784)
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 784)
+                )
+
+    ts_model = fit_ts_model(
+            enc_train_features,
+            train_labels
+            )
+
+    trust_score,\
+        closest_not_pred,\
+        pred_idx,\
+        closest_not_pred_idx = get_trust_score(
+                ts_model,
+                enc_test_features[index],
+                prediction
+                )
+    visualize_trust_score(
+            test_features,
+            enc_test_features,
+            test_labels,
+            prediction,
+            trust_score[0],
+            index,
+            pred_idx[0],
+            closest_not_pred_idx[0]
+            )
 
 
 if __name__ == '__main__':
