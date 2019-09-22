@@ -160,12 +160,20 @@ def visualize_trust_score(
         [enc_test_features[closest_not_pred_idx][0],
             enc_test_features[closest_not_pred_idx][1]]
         ])
-    plt.scatter(
+    labels = ['true_class', 'predicted_class', 'closest_not_predicted']
+    figure, axes = plt.subplots()
+    axes.scatter(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
-            alpha=0.7,
             c=np.arange(3)
             )
+    for x_i, y_i, label in zip(
+            enc_test_features[:, 0],
+            enc_test_features[:, 1],
+            labels
+            ):
+        axes.annotate(str(label), xy=(x_i, y_i))
+    plt.grid()
     plt.show()
 
 
