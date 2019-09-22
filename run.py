@@ -6,13 +6,16 @@ from __future__ import print_function
 __author__ = 'Abien Fred Agarap'
 __version__ = '1.0.0'
 
+import sys
+
 import matplotlib.pyplot as plt
-from notebooks.models.lenet import LeNet
-from notebooks.trustscore import TrustScore
 import numpy as np
 from sklearn.decomposition import PCA
-import sys
 import tensorflow as tf
+
+from notebooks.models.lenet import LeNet
+from notebooks.trustscore import TrustScore
+
 
 model = LeNet(num_classes=10)
 model.load_weights('notebooks/saved_model/mnist/lenet/1')
