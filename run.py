@@ -133,10 +133,14 @@ def visualize_trust_score(
         index,
         pred_idx,
         closest_not_pred_idx,
+        distances
         ):
 
     print('[INFO] Visualizing prediction and trust score.')
     predictions = predictions.numpy().reshape(-1)
+    d_to_pred, d_to_closest_not_pred = distances
+    d_to_pred = d_to_pred[0]
+    d_to_closest_not_pred = d_to_closest_not_pred[0]
 
     enc_test_features = np.array([
         [enc_test_features[index][0], enc_test_features[index][1]],
@@ -161,6 +165,12 @@ def visualize_trust_score(
             labels
             ):
         plt.annotate(label, xy=(x_i, y_i))
+    plt.title('Distance between\nPredicted and True : {:.5f}\n'
+              'Not Predicted and True : {:.5f}'.format(
+                  d_to_pred,
+                  d_to_closest_not_pred
+                  ),
+              loc='right')
     plt.grid()
 
     plt.subplot2grid((3, 3), (0, 2))
@@ -280,7 +290,8 @@ def main(arguments):
             trust_score[0],
             index,
             pred_idx[0],
-            closest_not_pred_idx[0]
+            closest_not_pred_idx[0],
+            (d_to_pred, d_to_closest_not_pred)
             )
 
 
