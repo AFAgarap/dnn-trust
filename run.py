@@ -95,34 +95,50 @@ def get_trust_score(ts_model, test_features, predictions):
                     )
     return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
-predictions = predictions.numpy().reshape(-1)
-pred_idx = pred_idx[0]
-closest_not_pred_idx = closest_not_pred_idx[0]
 
-plt.figure(figsize=(15, 5))
-plt.subplot(131)
-plt.imshow(test_features[index].reshape(28, 28), cmap='gray')
-plt.title('label : {}'.format(tf.argmax(test_labels[index])))
-plt.subplot(132)
-plt.imshow(test_features[pred_idx].reshape(28, 28), cmap='gray')
-plt.title('predicted : {} ({:.6f})\ntrust score : {:.6f}'.format(
-    tf.argmax(predictions).numpy(),
-    tf.math.reduce_max(predictions),
-    trust_score[0]
-    ))
-plt.subplot(133)
-plt.imshow(test_features[closest_not_pred_idx].reshape(28, 28), cmap='gray')
-plt.title('closest not predicted : {} ({:.6f})'.format(
-    tf.argmax(test_labels[closest_not_pred_idx]),
-    tf.math.reduce_max(test_labels[closest_not_pred_idx])
-    ))
-plt.show()
+def visualize_trust_score(
+        test_features,
+        enc_test_features,
+        test_label,
+        predictions,
+        trust_score,
+        index,
+        pred_idx,
+        closest_not_pred_idx,
+        ):
+    predictions = predictions.numpy().reshape(-1)
 
-scatter = np.array([
-    [enc_test_features[index][0], enc_test_features[index][1]],
-    [enc_test_features[pred_idx][0], enc_test_features[pred_idx][1]],
-    [enc_test_features[closest_not_pred_idx][0], enc_test_features[closest_not_pred_idx][1]]
-            ])
-print(scatter)
-plt.scatter(scatter[:, 0], scatter[:, 1], alpha=0.5, c=np.arange(3))
-plt.show()
+    plt.figure(figsize=(15, 5))
+    plt.subplot(131)
+    plt.imshow(test_features[index].reshape(28, 28), cmap='gray')
+    plt.title('label : {}'.format(tf.argmax(test_label[index])))
+    plt.subplot(132)
+    plt.imshow(test_features[pred_idx].reshape(28, 28), cmap='gray')
+    plt.title('predicted : {} ({:.6f})\ntrust score : {:.6f}'.format(
+        tf.argmax(predictions).numpy(),
+        tf.math.reduce_max(predictions),
+        trust_score
+    ))
+    plt.subplot(133)
+    plt.imshow(
+            test_features[closest_not_pred_idx].reshape(28, 28), cmap='gray'
+            )
+    plt.title('closest not predicted : {} ({:.6f})'.format(
+        tf.argmax(test_label[closest_not_pred_idx]),
+        tf.math.reduce_max(test_label[closest_not_pred_idx])
+    ))
+    plt.show()
+
+    enc_test_features = np.array([
+        [enc_test_features[index][0], enc_test_features[index][1]],
+        [enc_test_features[pred_idx][0], enc_test_features[pred_idx][1]],
+        [enc_test_features[closest_not_pred_idx][0],
+            enc_test_features[closest_not_pred_idx][1]]
+        ])
+    plt.scatter(
+            enc_test_features[:, 0],
+            enc_test_features[:, 1],
+            alpha=0.7,
+            c=np.arange(3)
+            )
+    plt.show()
