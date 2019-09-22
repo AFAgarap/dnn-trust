@@ -26,6 +26,7 @@ import argparse
 
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import seaborn as sns
 from sklearn.decomposition import PCA
@@ -148,36 +149,56 @@ def visualize_trust_score(
     d_to_closest_not_pred = d_to_closest_not_pred[0]
 
     enc_test_features = np.array([
-        [enc_test_features[index][0], enc_test_features[index][1]],
-        [enc_test_features[pred_idx][0], enc_test_features[pred_idx][1]],
-        [enc_test_features[closest_not_pred_idx][0],
-            enc_test_features[closest_not_pred_idx][1]]
+        [
+            enc_test_features[index][0],
+            enc_test_features[index][1],
+            enc_test_features[index][2]],
+        [
+            enc_test_features[pred_idx][0],
+            enc_test_features[pred_idx][1],
+            enc_test_features[pred_idx][2]
+        ],
+        [
+            enc_test_features[closest_not_pred_idx][0],
+            enc_test_features[closest_not_pred_idx][1],
+            enc_test_features[closest_not_pred_idx][2]
+        ]
         ])
     labels = ['True Class', 'Predicted Class', 'Closest not predicted']
 
     figure = plt.figure(1)
     gridspec.GridSpec(3, 3)
 
-    plt.subplot2grid((3, 3), (0, 0), colspan=2, rowspan=3)
-    plt.scatter(
+    axes = plt.subplot2grid(
+            (3, 3), (0, 0), colspan=2, rowspan=3, projection='3d'
+            )
+    axes.scatter(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
+            enc_test_features[:, 2],
             color=['red', 'blue', 'green'],
             s=50
             )
-    for x_i, y_i, label in zip(
+    for x_i, y_i, z_i, label in zip(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
+            enc_test_features[:, 2],
             labels
             ):
-        plt.annotate(label, xy=(x_i, y_i))
+        label = '{}\n({:.3f}, {:.3f}, {:.3f})'.format(
+                label, x_i, y_i, z_i
+                )
+        axes.text(x_i, y_i, z_i, label, zorder=1)
+    axes.set_xlabel('Feature 0')
+    axes.set_ylabel('Feature 1')
+    axes.set_zlabel('Feature 2')
     plt.title('Distance between\nPredicted and True : {:.5f}\n'
               'Not Predicted and True : {:.5f}'.format(
                   d_to_pred,
                   d_to_closest_not_pred
                   ),
               loc='center')
-    plt.grid()
+    axes.grid(True)
 
     plt.subplot2grid((3, 3), (0, 2))
     plt.imshow(test_features[index].reshape(28, 28), cmap='gray')
