@@ -110,15 +110,16 @@ def get_prediction(model, test_features, index=None):
 
 
 def get_trust_score(ts_model, test_features, predictions):
-    trust_score,\
-            closest_not_pred,\
-            pred_idx,\
-            closest_not_pred_idx = ts_model.score(
+    trust_score, closest_not_pred,\
+            pred_idx, closest_not_pred_idx,\
+            d_to_pred, d_to_closest_not_pred = ts_model.score(
                     test_features.reshape(-1, 64),
                     predictions.numpy().reshape(1, -1)
                     )
     print('[INFO] Computed trust score.')
-    return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
+    return trust_score, closest_not_pred,\
+        pred_idx, closest_not_pred_idx,\
+        d_to_pred, d_to_closest_not_pred
 
 
 def visualize_trust_score(
@@ -256,10 +257,9 @@ def main(arguments):
             train_labels
             )
 
-    trust_score,\
-        closest_not_pred,\
-        pred_idx,\
-        closest_not_pred_idx = get_trust_score(
+    trust_score, closest_not_pred,\
+        pred_idx, closest_not_pred_idx,\
+        d_to_pred, d_to_closest_not_pred = get_trust_score(
                 ts_model,
                 enc_test_features[index],
                 prediction
