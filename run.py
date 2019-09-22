@@ -175,7 +175,63 @@ def parse_args():
 
 
 def main(arguments):
-    pass
+    model = arguments.model
+    model_path = arguments.model_path
+    index = arguments.index
+
+    (train_features, train_labels),\
+        (test_features, test_labels),\
+        (enc_train_features, enc_test_features) = load_data()
+
+    if (model == 'LeNet') or (model == 'lenet'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path
+                )
+    elif (model == 'MiniVGG') or (model == 'mini_vgg'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path,
+                input_shape=(28, 28, 1)
+                )
+    elif (model == 'NeuralNet') or (model == 'dnn'):
+        model = load_model(
+                model_name=model,
+                model_path=model_path,
+                input_shape=(784,),
+                units=[512, 512],
+                dropout_rate=2e-1
+                )
+        test_features = test_features.reshape(-1, 784)
+
+    ts_model = fit_ts_model(
+            enc_train_features,
+            train_labels
+            )
+
+    prediction = get_prediction(
+            model,
+            test_features[index]
+            )
+
+    trust_score,\
+        closest_not_pred,\
+        pred_idx,\
+        closest_not_pred_idx = get_trust_score(
+                ts_model,
+                enc_test_features[index],
+                prediction
+                )
+    visualize_trust_score(
+            test_features,
+            enc_test_features,
+            test_labels,
+            prediction,
+            trust_score,
+            index,
+            pred_idx,
+            closest_not_pred_idx
+            )
 
 
 if __name__ == '__main__':
