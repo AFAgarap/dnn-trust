@@ -54,6 +54,7 @@ def load_data():
                 -1, test_features.shape[1] * test_features.shape[2]
                 )
             )
+    print('[INFO] Loaded dataset.')
     return (train_features, train_labels),\
            (test_features, test_labels),\
            (enc_train_features, enc_test_features)
@@ -85,16 +86,22 @@ def load_model(model_name, model_path, num_classes=10, **kwargs):
                 )
     model.load_weights(model_path)
     model.trainable = False
+    print('[INFO] Loaded trained {} from {}'.format(
+        model_name,
+        model_path
+        ))
     return model
 
 
 def fit_ts_model(train_features, train_labels, alpha=5e-2):
     ts = TrustScore(alpha=alpha)
     ts.fit(train_features, train_labels)
+    print('[INFO] Fitted trust score model.')
     return ts
 
 
 def get_prediction(model, test_features, index=None):
+    print('[INFO] Getting prediction.')
     return model(test_features)
 
 
@@ -106,6 +113,7 @@ def get_trust_score(ts_model, test_features, predictions):
                     test_features.reshape(-1, 64),
                     predictions.numpy().reshape(1, -1)
                     )
+    print('[INFO] Computed trust score.')
     return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
 
@@ -119,6 +127,8 @@ def visualize_trust_score(
         pred_idx,
         closest_not_pred_idx,
         ):
+
+    print('[INFO] Visualizing prediction and trust score.')
     predictions = predictions.numpy().reshape(-1)
 
     plt.figure(figsize=(15, 5))
