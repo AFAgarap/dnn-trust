@@ -13,7 +13,9 @@ import numpy as np
 from sklearn.decomposition import PCA
 import tensorflow as tf
 
+from notebooks.models.dnn import NeuralNet
 from notebooks.models.lenet import LeNet
+from notebooks.models.mini_vgg import MiniVGG
 from notebooks.trustscore import TrustScore
 
 
