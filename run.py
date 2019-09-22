@@ -82,33 +82,17 @@ def fit_ts_model(train_features, train_labels, alpha=5e-2):
 
 
 def get_prediction(model, test_features, index=None):
-    if index is None:
-        return model(
-                test_features.reshape(
-                    -1, test_features.shape[1], test_features.shape[2], 1
-                    )
-                )
-    elif index is not None:
-        return model(
-                test_features[index].reshape(
-                    -1, test_features.shape[1], test_features.shape[2], 1
-                    )
-                )
+    return model(test_features[:, :, :, np.newaxis])
 
 
 def get_trust_score(ts_model, test_features, predictions):
-    if predictions.numpy().shape[0] == 1:
-        predictions = predictions.numpy().reshape(1, -1)
-    elif predictions.numpy().shape[0] > 1:
-        predictions = predictions.numpy()
-
     trust_score,\
-        closest_not_pred,\
-        pred_idx,\
-        closest_not_pred_idx = ts_model.score(
-            test_features.reshape(-1, 64),
-            predictions
-            )
+            closest_not_pred,\
+            pred_idx,\
+            closest_not_pred_idx = ts_model.score(
+                    test_features.reshape(-1, 64),
+                    predictions.numpy.reshape(1, -1)
+                    )
     return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
 predictions = predictions.numpy().reshape(-1)
