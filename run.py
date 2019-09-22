@@ -23,9 +23,11 @@ __version__ = '1.0.0'
 
 import argparse
 
+
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from sklearn.decomposition import PCA
 import tensorflow as tf
 
@@ -137,6 +139,9 @@ def visualize_trust_score(
         ):
 
     print('[INFO] Visualizing prediction and trust score.')
+
+    sns.set_style('dark')
+
     predictions = predictions.numpy().reshape(-1)
     d_to_pred, d_to_closest_not_pred = distances
     d_to_pred = d_to_pred[0]
@@ -157,7 +162,8 @@ def visualize_trust_score(
     plt.scatter(
             enc_test_features[:, 0],
             enc_test_features[:, 1],
-            c=np.arange(3)
+            color=['red', 'blue', 'green'],
+            s=50
             )
     for x_i, y_i, label in zip(
             enc_test_features[:, 0],
