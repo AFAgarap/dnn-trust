@@ -80,7 +80,7 @@ def fit_ts_model(train_features, train_labels, alpha=5e-2):
 
 
 def get_prediction(model, test_features, index=None):
-    return model(test_features[:, :, :, np.newaxis])
+    return model(test_features)
 
 
 def get_trust_score(ts_model, test_features, predictions):
@@ -188,11 +188,19 @@ def main(arguments):
                 model_name=model,
                 model_path=model_path
                 )
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 28, 28, 1)
+                )
     elif (model == 'MiniVGG') or (model == 'mini_vgg'):
         model = load_model(
                 model_name=model,
                 model_path=model_path,
                 input_shape=(28, 28, 1)
+                )
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 28, 28, 1)
                 )
     elif (model == 'NeuralNet') or (model == 'dnn'):
         model = load_model(
@@ -203,15 +211,14 @@ def main(arguments):
                 dropout_rate=2e-1
                 )
         test_features = test_features.reshape(-1, 784)
+        prediction = get_prediction(
+                model,
+                test_features[index].reshape(-1, 784)
+                )
 
     ts_model = fit_ts_model(
             enc_train_features,
             train_labels
-            )
-
-    prediction = get_prediction(
-            model,
-            test_features[index]
             )
 
     trust_score,\
