@@ -89,7 +89,7 @@ def get_trust_score(ts_model, test_features, predictions):
             pred_idx,\
             closest_not_pred_idx = ts_model.score(
                     test_features.reshape(-1, 64),
-                    predictions.numpy.reshape(1, -1)
+                    predictions.numpy().reshape(1, -1)
                     )
     return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
