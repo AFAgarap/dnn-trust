@@ -34,6 +34,10 @@ from notebooks.models.mini_vgg import MiniVGG
 from notebooks.trustscore import TrustScore
 
 
+tf.random.set_seed(42)
+np.random.seed(42)
+
+
 def load_data():
     (train_features, train_labels),\
             (test_features, test_labels) =\
