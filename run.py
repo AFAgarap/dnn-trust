@@ -13,7 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 "Visualization tool for understanding trust score"
 from __future__ import absolute_import
 from __future__ import division
