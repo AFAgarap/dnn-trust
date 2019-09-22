@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from notebooks.models.lenet import LeNet
 from notebooks.trustscore import TrustScore
+import numpy as np
 from sklearn.decomposition import PCA
 import sys
 import tensorflow as tf
@@ -53,4 +54,15 @@ plt.title('closest not predicted : {} ({:.6f})'.format(
     tf.argmax(test_labels[closest_not_pred_idx]),
     tf.math.reduce_max(test_labels[closest_not_pred_idx])
     ))
+plt.show()
+
+scatter = np.array(
+        [
+            [enc_test_features[index][0], enc_test_features[pred_idx][0], enc_test_features[closest_not_pred_idx][0]],
+            [enc_test_features[index][1], enc_test_features[pred_idx][1], enc_test_features[closest_not_pred_idx][1]]
+        ])
+scatter = scatter.T
+print(scatter)
+print(scatter.shape)
+plt.scatter(scatter[:, 0], scatter[:, 1], alpha=0.5, c=np.arange(3))
 plt.show()
