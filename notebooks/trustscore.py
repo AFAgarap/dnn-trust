@@ -174,19 +174,29 @@ class TrustScore(object):
             X = X.reshape(X.shape[0], -1)
 
         d = np.tile(None, (X.shape[0], self.classes))  # init distance matrix: [nb instances, nb classes]
+        idx = np.tile(None, (X.shape[0], self.classes))
 
         for c in range(self.classes):
-            d_tmp = self.kdtrees[c].query(X, k=k)[0]  # get k nearest neighbors for each class
+#             d_tmp = self.kdtrees[c].query(X, k=k)[0]  # get k nearest neighbors for each class
+            d_tmp, d_tmp_idx = self.kdtrees[c].query(X, k=k)
             if dist_type == 'point':
                 d[:, c] = d_tmp[:, -1]
             elif dist_type == 'mean':
                 d[:, c] = np.mean(d_tmp, axis=1)
+            idx[:, c] = d_tmp_idx[:, -1]
+
 
         sorted_d = np.sort(d, axis=1)  # sort distance each instance in batch over classes
+        sorted_d_idx = np.sort(idx, axis=1)
+
         # get distance to predicted and closest other class and calculate trust score
         d_to_pred = d[range(d.shape[0]), Y]
+        d_to_pred_idx = idx[range(idx.shape[0]), Y]
         d_to_closest_not_pred = np.where(sorted_d[:, 0] != d_to_pred, sorted_d[:, 0], sorted_d[:, 1])
+        d_to_closest_not_pred_idx = np.where(sorted_d_idx[:, 0] != d_to_pred, sorted_d_idx[:, 0], sorted_d_idx[:, 1])
         trust_score = d_to_closest_not_pred / (d_to_pred + self.eps)
         # closest not predicted class
         class_closest_not_pred = np.where(d == d_to_closest_not_pred.reshape(-1, 1))[1]
-        return trust_score, class_closest_not_pred
+
+#         return trust_score, class_closest_not_pred
+        return trust_score, class_closest_not_pred, d_to_pred_idx, d_to_closest_not_pred_idx
