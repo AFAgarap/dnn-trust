@@ -96,11 +96,20 @@ def get_prediction(model, test_features, index=None):
                 )
 
 
-trust_score, closest_not_pred,\
-        pred_idx, closest_not_pred_idx = ts.score(
-                enc_test_features[index].reshape(-1, 64),
-                predictions.numpy().reshape(1, -1)
-                )
+def get_trust_score(ts_model, test_features, predictions):
+    if predictions.numpy().shape[0] == 1:
+        predictions = predictions.numpy().reshape(1, -1)
+    elif predictions.numpy().shape[0] > 1:
+        predictions = predictions.numpy()
+
+    trust_score,\
+        closest_not_pred,\
+        pred_idx,\
+        closest_not_pred_idx = ts_model.score(
+            test_features.reshape(-1, 64),
+            predictions
+            )
+    return trust_score, closest_not_pred, pred_idx, closest_not_pred_idx
 
 predictions = predictions.numpy().reshape(-1)
 pred_idx = pred_idx[0]
