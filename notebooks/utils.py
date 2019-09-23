@@ -16,8 +16,8 @@ from trustscore import TrustScore
 def run_model(model, train_features, train_labels, test_features):
     model.fit(train_features,
               train_labels,
-              batch_size=512,
-              epochs=60,
+              batch_size=128,
+              epochs=5,
               verbose=0)
     predicted_prob_dist = model.predict(test_features)
     predicted_class = tf.argmax(predicted_prob_dist, axis=1)
