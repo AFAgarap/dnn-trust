@@ -92,7 +92,7 @@ def run_precision_plt(features, labels, nfolds, percentiles, run_model, test_siz
 
         ts = TrustScore()
         ts.fit(enc_train_features, train_labels, classes=classes)
-        scores, _ = ts.score(enc_val_features, predicted_class, k=5)
+        scores, _, _, _, _, _ = ts.score(enc_val_features, predicted_class, k=5)
         final_curves.append(scores)
 
         for p, perc in enumerate(percentiles):
