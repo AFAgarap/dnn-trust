@@ -28,16 +28,16 @@ class LeNet(tf.keras.Model):
     def __init__(self, **kwargs):
         super(LeNet, self).__init__()
         self.conv_layer_1 = tf.keras.layers.Conv2D(
-                6,
-                (5, 5),
+                filters=6,
+                kernel_size=(5, 5),
                 input_shape=(28, 28, 1),
                 padding='valid',
                 activation=tf.nn.relu
                 )
         self.pool_layer_1 = tf.keras.layers.MaxPooling2D(padding='same')
         self.conv_layer_2 = tf.keras.layers.Conv2D(
-                16,
-                (5, 5),
+                filters=16,
+                kernel_size=(5, 5),
                 padding='valid',
                 activation=tf.nn.relu
                 )

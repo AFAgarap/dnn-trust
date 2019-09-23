@@ -28,27 +28,27 @@ class MiniVGG(tf.keras.Model):
     def __init__(self, **kwargs):
         super(MiniVGG, self).__init__()
         self.conv1_layer_1 = tf.keras.layers.Conv2D(
-                32,
-                (3, 3),
+                filters=32,
+                kernel_size=(3, 3),
                 activation=tf.nn.relu,
                 input_shape=kwargs['input_shape']
                 )
         self.conv1_layer_2 = tf.keras.layers.Conv2D(
-                32,
-                (3, 3),
+                filters=32,
+                kernel_size=(3, 3),
                 activation=tf.nn.relu
                 )
         self.pool_layer_1 = tf.keras.layers.MaxPooling2D(
                 pool_size=(2, 2)
                 )
         self.conv2_layer_1 = tf.keras.layers.Conv2D(
-                64,
-                (3, 3),
+                filters=64,
+                kernel_size=(3, 3),
                 activation=tf.nn.relu
                 )
         self.conv2_layer_2 = tf.keras.layers.Conv2D(
-                64,
-                (3, 3),
+                filters=64,
+                kernel_size=(3, 3),
                 activation=tf.nn.relu
                 )
         self.pool_layer_2 = tf.keras.layers.MaxPooling2D(
