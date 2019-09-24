@@ -1,3 +1,10 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+__author__ = 'Arnaud Van Looveren, Abien Fred Agarap'
+__version__ = '1.0.0'
+
 import logging
 import numpy as np
 from sklearn.neighbors import KDTree
@@ -9,8 +16,14 @@ logger = logging.getLogger(__name__)
 
 class TrustScore(object):
 
-    def __init__(self, k_filter: int = 10, alpha: float = 0., filter_type: str = None,
-                 leaf_size: int = 40, metric: str = 'euclidean', dist_filter_type: str = 'point') -> None:
+    def __init__(
+            self,
+            k_filter: int = 10,
+            alpha: float = 0.,
+            filter_type: str = None,
+            leaf_size: int = 40,
+            metric: str = 'euclidean',
+            dist_filter_type: str = 'point') -> None:
         """
         Initialize trust scores.
 
@@ -54,16 +67,25 @@ class TrustScore(object):
         Filtered data.
         """
         kdtree = KDTree(X, leaf_size=self.leaf_size, metric=self.metric)
-        knn_r = kdtree.query(X, k=self.k_filter + 1)[0]  # distances from 0 to k-nearest points
+        knn_r = kdtree.query(
+                X, k=self.k_filter + 1
+                )[0]  # distances from 0 to k-nearest points
         if self.dist_filter_type == 'point':
             knn_r = knn_r[:, -1]
         elif self.dist_filter_type == 'mean':
-            knn_r = np.mean(knn_r[:, 1:], axis=1)  # exclude distance of instance to itself
-        cutoff_r = np.percentile(knn_r, (1 - self.alpha) * 100)  # cutoff distance
+            knn_r = np.mean(
+                    knn_r[:, 1:], axis=1
+                    )  # exclude distance of instance to itself
+        cutoff_r = np.percentile(
+                knn_r, (1 - self.alpha) * 100
+                )  # cutoff distance
         X_keep = X[np.where(knn_r <= cutoff_r)[0], :]  # define instances to keep
         return X_keep
 
-    def filter_by_probability_knn(self, X: np.ndarray, Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def filter_by_probability_knn(
+            self,
+            X: np.ndarray,
+            Y: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Filter out instances with high label disagreement amongst its k nearest neighbors.
 
@@ -83,12 +105,17 @@ class TrustScore(object):
                            'be >1, otherwise the prediction probabilities are either 0 or 1 making '
                            'probability filtering useless.')
         # fit kNN classifier and make predictions on X
-        clf = KNeighborsClassifier(n_neighbors=self.k_filter, leaf_size=self.leaf_size, metric=self.metric)
+        clf = KNeighborsClassifier(
+                n_neighbors=self.k_filter,
+                leaf_size=self.leaf_size,
+                metric=self.metric
+                )
         clf.fit(X, Y)
         preds_proba = clf.predict_proba(X)
         # define cutoff and instances to keep
         preds_max = np.max(preds_proba, axis=1)
-        cutoff_proba = np.percentile(preds_max, self.alpha * 100)  # cutoff probability
+        cutoff_proba = np.percentile(
+                preds_max, self.alpha * 100)  # cutoff probability
         keep_id = np.where(preds_max >= cutoff_proba)[0]  # define id's of instances to keep
         X_keep, Y_keep = X[keep_id, :], Y[keep_id]
         return X_keep, Y_keep
@@ -138,10 +165,18 @@ class TrustScore(object):
             elif no_x_fit:
                 logger.warning('Filtered all the instances for class %s. Lower alpha or check data.', c)
 
-            self.kdtrees[c] = KDTree(X_fit, leaf_size=self.leaf_size, metric=self.metric)  # build KDTree for class c
+            self.kdtrees[c] = KDTree(
+                    X_fit,
+                    leaf_size=self.leaf_size,
+                    metric=self.metric)  # build KDTree for class c
             self.X_kdtree[c] = X_fit
 
-    def score(self, X: np.ndarray, Y: np.ndarray, k: int = 2, dist_type: str = 'point') \
+    def score(
+            self,
+            X: np.ndarray,
+            Y: np.ndarray,
+            k: int = 2,
+            dist_type: str = 'point') \
             -> Tuple[np.ndarray, np.ndarray]:
         """
         Calculate trust scores = ratio of distance to closest class other than the
@@ -173,7 +208,10 @@ class TrustScore(object):
                            'be queried.'.format(X.shape, X.reshape(X.shape[0], -1).shape))
             X = X.reshape(X.shape[0], -1)
 
-        d = np.tile(None, (X.shape[0], self.classes))  # init distance matrix: [nb instances, nb classes]
+        d = np.tile(
+                None,
+                (X.shape[0], self.classes)
+                )  # init distance matrix: [nb instances, nb classes]
         idx = np.tile(None, (X.shape[0], self.classes))
 
         for c in range(self.classes):
@@ -184,20 +222,28 @@ class TrustScore(object):
                 d[:, c] = np.mean(d_tmp, axis=1)
             idx[:, c] = d_tmp_idx[:, -1]
 
-
         sorted_d = np.sort(d, axis=1)  # sort distance each instance in batch over classes
         sorted_d_idx = np.sort(idx, axis=1)
 
         # get distance to predicted and closest other class and calculate trust score
         d_to_pred = d[range(d.shape[0]), Y]
         d_to_pred_idx = idx[range(idx.shape[0]), Y]
-        d_to_closest_not_pred = np.where(sorted_d[:, 0] != d_to_pred, sorted_d[:, 0], sorted_d[:, 1])
-        d_to_closest_not_pred_idx = np.where(sorted_d[:, 0] != d_to_pred, sorted_d_idx[:, 0], sorted_d_idx[:, 1])
+        d_to_closest_not_pred = np.where(
+                sorted_d[:, 0] != d_to_pred,
+                sorted_d[:, 0],
+                sorted_d[:, 1]
+                )
+        d_to_closest_not_pred_idx = np.where(
+                sorted_d[:, 0] != d_to_pred,
+                sorted_d_idx[:, 0],
+                sorted_d_idx[:, 1]
+                )
 
         trust_score = d_to_closest_not_pred / (d_to_pred + self.eps)
 
         # closest not predicted class
-        class_closest_not_pred = np.where(d == d_to_closest_not_pred.reshape(-1, 1))[1]
+        class_closest_not_pred = np.where(
+                d == d_to_closest_not_pred.reshape(-1, 1))[1]
 
         return trust_score, class_closest_not_pred,\
             d_to_pred_idx, d_to_closest_not_pred_idx,\
