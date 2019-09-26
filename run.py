@@ -118,7 +118,8 @@ def get_trust_score(ts_model, test_features, predictions):
             pred_idx, closest_not_pred_idx,\
             d_to_pred, d_to_closest_not_pred = ts_model.score(
                     test_features.reshape(-1, 64),
-                    predictions.numpy().reshape(1, -1)
+                    predictions.numpy().reshape(1, -1),
+                    k=5
                     )
     print('[INFO] Computed trust score.')
     return trust_score, closest_not_pred,\
