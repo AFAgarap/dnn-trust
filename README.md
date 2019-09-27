@@ -30,6 +30,33 @@ $ pip install -r requirements.txt
 
 3. Run the any notebook in [notebooks](notebooks).
 
+You may also opt to using the uploaded [trained models](notebooks/saved_model), for instance,
+
+```
+$ cd dnn-trust
+$ python run.py --index 21
+``` 
+
+The full parameters of `run.py`,
+
+```buildoutcfg
+usage: run.py [-h] [-m MODEL] [-p MODEL_PATH] -i INDEX
+
+Visualization tool for understanding trust score
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Parameters:
+  -m MODEL, --model MODEL
+                        the model to use, default : [LeNet]
+  -p MODEL_PATH, --model_path MODEL_PATH
+                        the path to the trained model, default :
+                        [notebooks/saved_model/mnist/lenet/1]
+  -i INDEX, --index INDEX
+                        the index of the example to classify
+```
+
 ## Results
 
 Each model was trained for 60 epochs with a mini-batch size of 512 on the MNIST dataset (LeCun et al., 1998), resulting to 7,020 training steps. Both the 2-layer FFNN and LeNet-5 CNN were trained using SGD with Momentum (learning rate = 0.1, momentum = 0.9), with a learning rate decay of 1e-6. As for the mini-VGG CNN, it was trained using Adam (Kingma et al., 2014) with a learning rate of 0.01.
