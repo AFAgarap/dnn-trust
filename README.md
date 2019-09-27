@@ -19,6 +19,16 @@ Now, the aforementioned methods use the reported score of a model for confidence
 
 The trust score simply means the measurement of agreement between a trained classifier f(x) and a modified nearest-neighbor classifier g(x) on their prediction for test example x.
 
+## Usage
+
+1. Make a virtual environment to install TensorFlow 2.0.
+2. Install the dependencies
+
+```buildoutcfg
+$ pip install -r requirements.txt
+```
+
+3. Run the any notebook in [notebooks](notebooks).
 
 ## Results
 
