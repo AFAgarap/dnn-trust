@@ -25,7 +25,15 @@ To compute the trust score for our deep learning models, we used their model pre
 
 ![](assets/pr-curve.png)
 
+**Figure 1. Trust score results using 2-layer FFNN, LeNet-5, and Mini-VGG on MNIST dataset. Top row is detecting trustworthy; bottom row is detecting suspicious.**
+
 The vertical black lines in Figure 4 (a-c) denote the error level of the trained classifier while the vertical black lines in Figure 4 (d-f) denote the accuracy level of the trained classifiers. From both performance metrics, we can see that the trained classifier with both high test accuracy and trust score is the 2-layer FFNN — which is somehow not surprising in a way that it had the most number of parameters, and surprising in a way that despite its simpler architecture compared to our CNN-based models, it outperformed both in this test. To be fair, our CNN-based models were trained from scratch whereas in the original paper, they used a pre-trained VGG classifier and pre-trained smaller CNN classifiers.
+
+In Figure 2, we can see the position of the test example x in the 3D feature space, together with the predicted class h and the closest not predicted class ĥ (left side of the figure). We can also see the numerical distance between x and h, and the numerical distance between x and ĥ. In addition, we can also see the test image x, the predicted class h (along with the likelihood and trust score), and the closest not predicted class ĥ at the right side of the figure.
+
+![](assets/ts-intuition.png)
+
+From Figure 5, we can confirm visually and numerically the distances among the points x, ĥ, and h. With the distance d(ĥ, x) being higher (i.e. 4.22289) than the distance d(h, x) (i.e. 2.73336), we can confirm the trust score given at the right side of the figure, 1.54494. Can the model prediction be trusted? Visually? Yes. We can see the plotted points where the x and h are much closer together than x and ĥ are, and the plotted images at the right in Figure 5 support the class prediction. Numerically? Yes. We can see the numerical distance among points, and compute the ratio between these numerical distances.
 
 ## License
 
