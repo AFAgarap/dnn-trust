@@ -90,19 +90,33 @@ From Figure 2, we can confirm visually and numerically the distances among the p
 ## References
 
 [1] Cheng, Heng-Tze, et al., Wide & deep learning for recommender systems (2016), Proceedings of the 1st workshop on deep learning for recommender systems.
+
 [2] Gulshan, Varun, et al., Development and validation of a deep learning algorithm for detection of diabetic retinopathy in retinal fundus photographs (2016), Jama 316.22.
+
 [3] Guo, Chuan, et al., On calibration of modern neural networks (2017), Proceedings of the 34th International Conference on Machine Learning-Volume 70, JMLR.org.
+
 [4] Hendrycks, Dan, and Kevin Gimpel, A baseline for detecting misclassified and out-of-distribution examples in neural networks (2016), arXiv preprint.
+
 [5] Jiang, Heinrich, et al., To trust or not to trust a classifier (2018), Advances in neural information processing systems.
+
 [6] Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E. Hinton, Imagenet classification with deep convolutional neural networks (2012), Advances in neural information processing systems.
+
 [7] Lakshminarayanan, Balaji, Alexander Pritzel, and Charles Blundell, Simple and scalable predictive uncertainty estimation using deep ensembles (2017), Advances in Neural Information Processing Systems.
+
 [8] LeCun, Yann, et al., Gradient-based learning applied to document recognition (1998), Proceedings of the IEEE 86.11.
+
 [9] LeCun, Yann, Corinna Cortes, and Christopher JC Burges, The MNIST database of handwritten digits (1998), http://yann.lecun.com/exdb/mnist.
+
 [10] Lee, John D., and Katrina A. See, Trust in automation: Designing for appropriate reliance (2004), Human factors 46.1.
+
 [11] Platt, John, Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods (1999), Advances in large margin classifiers 10.3.
+
 [12] Saria, Suchi, and Adarsh Subbaswamy, Tutorial: Safe and reliable machine learning (2019), arXiv preprint.
+
 [13] Simonyan, Karen, and Andrew Zisserman, Very deep convolutional networks for large-scale image recognition (2014), arXiv preprint.
+
 [14] Varshney, Kush R., and Homa Alemzadeh, On the safety of machine learning: Cyber-physical systems, decision sciences, and data products (2017), Big data 5.3.
+
 [15] Zadrozny, Bianca, and Charles Elkan, Transforming classifier scores into accurate multiclass probability estimates (2002), Proceedings of the eighth ACM SIGKDD international conference on Knowledge discovery and data mining.
 
 ## License
