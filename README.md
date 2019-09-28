@@ -1,7 +1,5 @@
-How can I trust you?
+How can I trust you? An intuition and tutorial on trust score
 ===
-
-# Comparing deep learning models using trust score
 
 ## Introduction
 
