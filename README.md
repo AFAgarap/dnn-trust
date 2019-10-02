@@ -1,5 +1,7 @@
+<div align='center'>
 How can I trust you? An intuition and tutorial on trust score
 ===
+</div>
 
 ## Introduction
 
