@@ -55,6 +55,7 @@ def plot_precision_curve(plot_title,
         plt.legend(loc='upper left', fontsize=14)
     model_acc = 100 * (1 - final_misclassification)
     plt.axvline(x=model_acc, linestyle='dotted', color='black')
+    plt.grid()
     plt.show()
 
 
