@@ -33,7 +33,7 @@ class NeuralNet(tf.keras.Model):
                 input_shape=kwargs['input_shape']
                 )
         self.dropout_layer_1 = tf.keras.layers.Dropout(
-                rate=['dropout_rate']
+                rate=kwargs['dropout_rate']
                 )
         self.hidden_layer_2 = tf.keras.layers.Dense(
                 units=kwargs['units'][1],
