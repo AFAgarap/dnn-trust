@@ -19,7 +19,7 @@ from __future__ import division
 from __future__ import print_function
 
 __author__ = 'Abien Fred Agarap'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 import tensorflow as tf
 
@@ -56,7 +56,6 @@ class LeNet(tf.keras.Model):
                 activation=tf.nn.softmax
                 )
 
-    @tf.function
     def call(self, features):
         activation = self.conv_layer_1(features)
         activation = self.pool_layer_1(activation)

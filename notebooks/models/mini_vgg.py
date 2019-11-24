@@ -19,7 +19,7 @@ from __future__ import division
 from __future__ import print_function
 
 __author__ = 'Abien Fred Agarap'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 import tensorflow as tf
 
@@ -66,7 +66,6 @@ class MiniVGG(tf.keras.Model):
                 activation=tf.nn.softmax
                 )
 
-    @tf.function
     def call(self, features):
         activation = self.conv1_layer_1(features)
         activation = self.conv1_layer_2(activation)
