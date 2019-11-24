@@ -2,11 +2,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 from sklearn.decomposition import PCA
 from sklearn.model_selection import StratifiedShuffleSplit
 import tensorflow as tf
@@ -33,7 +34,7 @@ def plot_precision_curve(plot_title,
                          final_stderr,
                          final_misclassification,
                          colors=['blue', 'darkorange', 'brown', 'red', 'purple']):
-
+    sns.set_style('dark')
     plt.title(plot_title, fontsize=18)
     colors = colors + list(cm.rainbow(np.linspace(0, 1, len(final_tp))))
     plt.xlabel('Percentile', fontsize=14)
