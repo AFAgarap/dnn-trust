@@ -18,8 +18,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-__author__ = 'Abien Fred Agarap'
-__version__ = '1.0.1'
+__author__ = "Abien Fred Agarap"
+__version__ = "1.0.1"
 
 import tensorflow as tf
 
@@ -28,43 +28,29 @@ class MiniVGG(tf.keras.Model):
     def __init__(self, **kwargs):
         super(MiniVGG, self).__init__()
         self.conv1_layer_1 = tf.keras.layers.Conv2D(
-                filters=32,
-                kernel_size=(3, 3),
-                activation=tf.nn.relu,
-                input_shape=kwargs['input_shape']
-                )
+            filters=32,
+            kernel_size=(3, 3),
+            activation=tf.nn.relu,
+            input_shape=kwargs["input_shape"],
+        )
         self.conv1_layer_2 = tf.keras.layers.Conv2D(
-                filters=32,
-                kernel_size=(3, 3),
-                activation=tf.nn.relu
-                )
-        self.pool_layer_1 = tf.keras.layers.MaxPooling2D(
-                pool_size=(2, 2)
-                )
+            filters=32, kernel_size=(3, 3), activation=tf.nn.relu
+        )
+        self.pool_layer_1 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
         self.conv2_layer_1 = tf.keras.layers.Conv2D(
-                filters=64,
-                kernel_size=(3, 3),
-                activation=tf.nn.relu
-                )
+            filters=64, kernel_size=(3, 3), activation=tf.nn.relu
+        )
         self.conv2_layer_2 = tf.keras.layers.Conv2D(
-                filters=64,
-                kernel_size=(3, 3),
-                activation=tf.nn.relu
-                )
-        self.pool_layer_2 = tf.keras.layers.MaxPooling2D(
-                pool_size=(2, 2)
-                )
+            filters=64, kernel_size=(3, 3), activation=tf.nn.relu
+        )
+        self.pool_layer_2 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
         self.dropout_layer_1 = tf.keras.layers.Dropout(rate=0.25)
         self.flatten = tf.keras.layers.Flatten()
-        self.fc_layer = tf.keras.layers.Dense(
-                units=256,
-                activation=tf.nn.relu
-                )
+        self.fc_layer = tf.keras.layers.Dense(units=256, activation=tf.nn.relu)
         self.dropout_layer_2 = tf.keras.layers.Dropout(rate=0.50)
         self.output_layer = tf.keras.layers.Dense(
-                units=kwargs['num_classes'],
-                activation=tf.nn.softmax
-                )
+            units=kwargs["num_classes"], activation=tf.nn.softmax
+        )
 
     def call(self, features):
         activation = self.conv1_layer_1(features)

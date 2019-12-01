@@ -18,8 +18,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-__author__ = 'Abien Fred Agarap'
-__version__ = '1.0.1'
+__author__ = "Abien Fred Agarap"
+__version__ = "1.0.1"
 
 import tensorflow as tf
 
@@ -28,24 +28,18 @@ class NeuralNet(tf.keras.Model):
     def __init__(self, **kwargs):
         super(NeuralNet, self).__init__()
         self.hidden_layer_1 = tf.keras.layers.Dense(
-                units=kwargs['units'][0],
-                activation=tf.nn.relu,
-                input_shape=kwargs['input_shape']
-                )
-        self.dropout_layer_1 = tf.keras.layers.Dropout(
-                rate=kwargs['dropout_rate']
-                )
+            units=kwargs["units"][0],
+            activation=tf.nn.relu,
+            input_shape=kwargs["input_shape"],
+        )
+        self.dropout_layer_1 = tf.keras.layers.Dropout(rate=kwargs["dropout_rate"])
         self.hidden_layer_2 = tf.keras.layers.Dense(
-                units=kwargs['units'][1],
-                activation=tf.nn.relu
-                )
-        self.dropout_layer_2 = tf.keras.layers.Dropout(
-                rate=kwargs['dropout_rate']
-                )
+            units=kwargs["units"][1], activation=tf.nn.relu
+        )
+        self.dropout_layer_2 = tf.keras.layers.Dropout(rate=kwargs["dropout_rate"])
         self.output_layer = tf.keras.layers.Dense(
-                units=kwargs['num_classes'],
-                activation=tf.nn.softmax
-                )
+            units=kwargs["num_classes"], activation=tf.nn.softmax
+        )
 
     def call(self, features):
         activation = self.hidden_layer_1(features)
