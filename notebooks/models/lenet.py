@@ -21,7 +21,16 @@ from __future__ import print_function
 __author__ = "Abien Fred Agarap"
 __version__ = "1.0.1"
 
+from functools import partial
+
 import tensorflow as tf
+
+
+conv2d = partial(
+        tf.keras.layers.Conv2D,
+        activation=tf.nn.relu,
+        kernel_initializer="he_normal"
+        )
 
 
 class LeNet(tf.keras.Model):
