@@ -27,16 +27,16 @@ import tensorflow as tf
 
 
 conv2d = partial(
-        tf.keras.layers.Conv2D,
-        activation=tf.nn.relu,
-        kernel_initializer="he_normal"
-        )
+    tf.keras.layers.Conv2D, activation=tf.nn.relu, kernel_initializer="he_normal"
+)
 
 
 class LeNet(tf.keras.Model):
     def __init__(self, **kwargs):
         super(LeNet, self).__init__()
-        self.conv_layer_1 = conv2d(filters=6, kernel_size=5, input_shape=(28, 28, 1), padding="valid")
+        self.conv_layer_1 = conv2d(
+            filters=6, kernel_size=5, input_shape=(28, 28, 1), padding="valid"
+        )
         self.pool_layer_1 = tf.keras.layers.MaxPooling2D(padding="same")
         self.conv_layer_2 = conv2d(filters=16, kernel_size=6, padding="valid")
         self.pool_layer_2 = tf.keras.layers.MaxPooling2D(padding="same")
