@@ -36,17 +36,9 @@ conv2d = partial(
 class LeNet(tf.keras.Model):
     def __init__(self, **kwargs):
         super(LeNet, self).__init__()
-        self.conv_layer_1 = tf.keras.layers.Conv2D(
-            filters=6,
-            kernel_size=(5, 5),
-            input_shape=(28, 28, 1),
-            padding="valid",
-            activation=tf.nn.relu,
-        )
+        self.conv_layer_1 = conv2d(filters=6, kernel_size=5, input_shape=(28, 28, 1), padding="valid")
         self.pool_layer_1 = tf.keras.layers.MaxPooling2D(padding="same")
-        self.conv_layer_2 = tf.keras.layers.Conv2D(
-            filters=16, kernel_size=(5, 5), padding="valid", activation=tf.nn.relu
-        )
+        self.conv_layer_2 = conv2d(filters=16, kernel_size=6, padding="valid")
         self.pool_layer_2 = tf.keras.layers.MaxPooling2D(padding="same")
         self.flatten = tf.keras.layers.Flatten()
         self.fc_layer_1 = tf.keras.layers.Dense(units=120, activation=tf.nn.relu)
