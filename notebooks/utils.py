@@ -16,6 +16,14 @@ from trustscore import TrustScore
 np.random.seed(42)
 
 
+def create_dataset(features, labels, batch_size):
+    dataset = tf.data.Dataset.from_tensor_slices((features, labels))
+    dataset = dataset.shuffle(features.shape[0])
+    dataset = dataset.prefetch(batch_size * 8)
+    dataset = dataset.batch(batch_size, True)
+    return dataset
+
+
 def run_model(model, train_features, train_labels, test_features):
     model.fit(train_features, train_labels, batch_size=128, epochs=5, verbose=0)
     predicted_prob_dist = model.predict(test_features)
