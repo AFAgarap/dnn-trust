@@ -2,6 +2,8 @@
 
 # How can I trust you?
 ### An intuition and tutorial on trust score
+[Medium blog](https://medium.com/@afagarap/how-can-i-trust-you-fb433a06256c)
+
 
 </div>
 
