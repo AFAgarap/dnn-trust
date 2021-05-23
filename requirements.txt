@@ -1,6 +1,6 @@
 seaborn==0.9.0
 numpy==1.14.5
-tensorflow==2.0.0-beta1
+tensorflow==2.5.0rc0
 tensorflow-gpu==2.0.0-beta1
 matplotlib==2.2.3
 scikit_learn==0.21.3
